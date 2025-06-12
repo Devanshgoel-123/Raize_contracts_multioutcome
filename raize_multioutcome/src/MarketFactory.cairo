@@ -186,6 +186,10 @@ pub mod MarketFactory  {
     }
 
     fn check_is_admin(self : @ContractState, caller : ContractAddress) -> bool { 
+        let owner = self.owner.read();
+        if owner == caller {
+            return true;
+        }
         let admins_idx = self.num_admins.read();
         let mut i = 1;
         while i != admins_idx + 1 {
