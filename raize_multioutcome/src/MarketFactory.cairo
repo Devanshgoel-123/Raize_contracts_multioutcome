@@ -249,6 +249,7 @@ pub mod MarketFactory  {
             let usdc_dispatcher = IERC20Dispatcher { contract_address: usdc_address };
             let mut market = self.multioutcome_markets.read(market_id);
             assert(market.is_active, 'Market not active.');
+            assert(market.no_of_outcomes > token_to_mint, 'Enter a valid Outcome');
             assert(get_block_timestamp() < market.deadline, 'Market has expired.');
             let (mut outcome1, mut outcome2, mut outcome3, mut outcome4) = market.outcomes;
             let txn: bool = usdc_dispatcher.transfer_from(get_caller_address(), get_contract_address(), amount);
@@ -263,7 +264,7 @@ pub mod MarketFactory  {
                 outcome2.bought_shares += bought_shares;
             }else if token_to_mint == 2 {
                 outcome3.bought_shares += bought_shares;
-            }else{
+            }else {
                 outcome4.bought_shares += bought_shares;
             }
             market.outcomes = (outcome1, outcome2, outcome3, outcome4);
